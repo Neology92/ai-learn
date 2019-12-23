@@ -33,12 +33,14 @@ df = pd.DataFrame(df_scaled, index=df.index, columns=df.columns)
 # End of pre-processing data #
 
 # EDA
-
+# Check which features are the most important
+# ----------------
 # from sklearn.feature_selection import SelectKBest, chi2
-
 # X = df.loc[:,df.columns!='RainTomorrow']
-# Y = df.loc[['RainTomorrow']]
+# Y = df[['RainTomorrow']]
+# selector = SelectKBest(chi2, k=3)
+# X_new = selector.fit_transform(X, Y)
 
-# print(X)
-# print(Y)
 
+df = df[['Humidity3pm', 'Rainfall', 'RainToday', 'RainTomorrow']]
+print(df)
