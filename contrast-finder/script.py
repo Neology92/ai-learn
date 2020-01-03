@@ -9,11 +9,21 @@ def sigmoid(x):
 
 X_train, Y_train, X_test, Y_test = read_from_files("./data")
 
-print(X_train.__len__())
-print(Y_train.__len__())
-print(X_test.__len__())
-print(Y_test.__len__())
+# Normalize data
+from sklearn.preprocessing import scale
+X_train = scale(X_train)
+Y_train = scale(Y_train)
+X_test = scale(X_test)
+Y_train = scale(Y_train)
 
-# synaptic_weights = 2 * np.random.random((3)) - 1
 
-# print (synaptic_weights)
+synaptic_weights = 2 * np.random.random((3,1)) - 1
+print("\nSynaptic weights: \n", synaptic_weights)
+
+for i in range(1):
+    
+    input_layer = X_train[:4]
+
+    output = sigmoid(np.dot(input_layer, synaptic_weights))
+    
+print("\nOutput: \n", output)
