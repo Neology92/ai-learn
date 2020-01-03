@@ -1,4 +1,5 @@
 import random as rnd
+import numpy as np
 
 # Gets R,G,B and calculates brightness
 # Checks which color is more contrast
@@ -13,12 +14,7 @@ def get_contrast_color(R,G,B):
 # Generates RGB x times
 # returns list of dictionaries
 def generate_RGB(times):
-    RGB = []
-    for i in range(times):
-        R = rnd.randint(0,255)
-        G = rnd.randint(0,255)
-        B = rnd.randint(0,255)
-        RGB.append({"R":R, "G":G, "B":B})
+    RGB = np.random.randint(0, 256, size=(times, 3))
     return RGB
 
 # Generates contrast color based on RGB list
@@ -26,12 +22,12 @@ def generate_RGB(times):
 def generate_BW(RGB):
     BW = []
     for i in range(RGB.__len__()):
-        R = RGB[i]['R']
-        G = RGB[i]['G']
-        B = RGB[i]['B']
+        R = RGB[i][0]
+        G = RGB[i][1]
+        B = RGB[i][2]
         font_color = get_contrast_color(R,G,B)
         BW.append(font_color)
-    return BW
+    return np.array([BW]).T
 
 
 # Gets X and Y, and slices according to ratio
@@ -50,60 +46,88 @@ def slice_train_test(X,Y,ratio):
     X_test = X[train_len:]
     Y_test = Y[train_len:]
 
+    # print("train:")
+    # print(X_train.__len__())
+    # print(Y_train.__len__())
+    # print("\ntest:")
+    # print(X_test.__len__())
+    # print(Y_test.__len__())
+
     return X_train, Y_train, X_test, Y_test
     
 # write lists of data to files
 def write_to_files(X_train, Y_train, X_test, Y_test, path):
-    import json
     # Train files
     file = open(f'{path}/train_input.txt',"w")
-    file.writelines(json.dumps(X_train))
+    for i in range(X_train.__len__()):
+        file.write(str(X_train[i])+'\n')
     file.close()
 
     file = open(f'{path}/train_output.txt',"w")
-    file.writelines(json.dumps(Y_train))
+    for i in range(Y_train.__len__()):
+        file.write(str(Y_train[i])+'\n')
     file.close()
 
     # Test files
     file = open(f'{path}/test_input.txt',"w")
-    file.writelines(json.dumps(X_test))
+    for i in range(X_test.__len__()):
+        file.write(str(X_test[i])+'\n')
     file.close()
 
     file = open(f'{path}/test_output.txt',"w")
-    file.writelines(json.dumps(Y_test))
+    for i in range(Y_train.__len__()):
+        file.write(str(Y_train[i])+'\n')
     file.close()
 
 
 # reads data
 # returns data as lists
 def read_from_files(path):
-    import json
+    X_train_buff = []
+    Y_train_buff = []
+    X_test_buff = []
+    Y_test_buff = []
+    
     # Train files
     file = open(f'{path}/train_input.txt',"r")
-    X_train = json.loads(file.read())
+    for line in file:
+        RGB = list(map(int, line[1:-2].split()))
+        X_train_buff.append(RGB)
     file.close()
-
+   
     file = open(f'{path}/train_output.txt',"r")
-    Y_train = json.loads(file.read())
+    for line in file:
+        RGB = list(map(int, line[1:-2].split()))
+        Y_train_buff.append(RGB)
     file.close()
+    
 
     # Test files
     file = open(f'{path}/test_input.txt',"r")
-    X_test = json.loads(file.read())
+    for line in file:
+        RGB = list(map(int, line[1:-2].split()))
+        X_test_buff.append(RGB)
     file.close()
 
     file = open(f'{path}/test_output.txt',"r")
-    Y_test = json.loads(file.read())
+    for line in file:
+        RGB = list(map(int, line[1:-2].split()))
+        Y_test_buff.append(RGB)
     file.close()
+
+
+    X_train = np.array(X_train_buff)
+    Y_train = np.array(Y_train_buff)
+    X_test = np.array(X_test_buff)
+    Y_test = np.array(Y_test_buff)
 
     return X_train, Y_train, X_test, Y_test
 
 
-
 if __name__ == "__main__":
 
-    SET_LEN = 10000        # 1+
-    SLICE_RATIO = 0.25  # 0 - 1
+    SET_LEN = 10000       # 1+
+    SLICE_RATIO = 0.25    # 0 - 1
 
     RGB = generate_RGB(SET_LEN)
     BW = generate_BW(RGB)

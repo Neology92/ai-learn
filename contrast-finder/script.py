@@ -7,8 +7,13 @@ def sigmoid(x):
     return 1 / (1 + np.e**(-x))
 
 
-# X_train, Y_train, X_test, Y_test = read_from_files("./data")
+X_train, Y_train, X_test, Y_test = read_from_files("./data")
 
-synaptic_weights = 2 * np.random.random((3)) - 1
+print(X_train.__len__())
+print(Y_train.__len__())
+print(X_test.__len__())
+print(Y_test.__len__())
 
-print (synaptic_weights)
+# synaptic_weights = 2 * np.random.random((3)) - 1
+
+# print (synaptic_weights)
