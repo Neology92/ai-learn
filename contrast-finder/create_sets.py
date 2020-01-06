@@ -75,8 +75,8 @@ def write_to_files(X_train, Y_train, X_test, Y_test, path):
     file.close()
 
     file = open(f'{path}/test_output.txt',"w")
-    for i in range(Y_train.__len__()):
-        file.write(str(Y_train[i])+'\n')
+    for i in range(Y_test.__len__()):
+        file.write(str(Y_test[i])+'\n')
     file.close()
 
 
@@ -126,7 +126,13 @@ def read_from_files(path):
 
 if __name__ == "__main__":
 
-    SET_LEN = 10000       # 1+
+        
+
+    SET_LEN = 100         # 1+
+    import sys
+    if(sys.argv[1]):
+        SET_LEN = int(sys.argv[1])
+    
     SLICE_RATIO = 0.25    # 0 - 1
 
     RGB = generate_RGB(SET_LEN)
@@ -134,5 +140,3 @@ if __name__ == "__main__":
 
     X_train, Y_train, X_test, Y_test = slice_train_test(RGB, BW, SLICE_RATIO)
     write_to_files(X_train, Y_train, X_test, Y_test, "./data")
-
-    
