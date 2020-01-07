@@ -28,20 +28,20 @@ Y_test = np.vstack(( Y_test.T/255, (Y_test.T/255-1)**2 )).T
 print(np.shape(X_test))
 print(np.shape(Y_test))
 
-layer2_bias = 2 * np.random.random((1,2)) - 1
+layer2_bias = 2 * np.random.random((1,3)) - 1
 # print("\nLayer2 bias: \n", layer2_bias)
-layer2_synaptic_weights = 2 * np.random.random((3,2)) - 1
+layer2_synaptic_weights = 2 * np.random.random((3,3)) - 1
 print("\nLayer 2 Synaptic weights: \n", layer2_synaptic_weights)
 
 output_bias = 2 * np.random.random((1,2)) - 1
 print("\nOutput bias: \n", output_bias)
-output_synaptic_weights = 2 * np.random.random((2,2)) - 1
+output_synaptic_weights = 2 * np.random.random((3,2)) - 1
 print("\nOutput Synaptic weights: \n", output_synaptic_weights)
 print("\n====================================================")
 
 LEARNING_RATE = 0.1
 
-for i in range(5000):
+for i in range(25000):
     
     input_layer = X_train
     # print("\nSynaptic weights: \n", synaptic_weights)
@@ -59,7 +59,7 @@ for i in range(5000):
     output_weights_delta = LEARNING_RATE * np.dot(layer2.T, output_gradient)
     output_bias_delta = LEARNING_RATE * output_gradient
 
-    layer2_error = np.dot(output_error, output_synaptic_weights)
+    layer2_error = np.dot(output_error, output_synaptic_weights.T)
     layer2_gradient = layer2_error * sigmoid_derivative(layer2)
     layer2_delta = LEARNING_RATE * np.dot(input_layer.T, layer2_gradient)
     layer2_bias_delta = LEARNING_RATE * layer2_gradient
