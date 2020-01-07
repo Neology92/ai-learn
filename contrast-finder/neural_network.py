@@ -56,12 +56,7 @@ class NeuralNetwork():
             output = neurons_values[-1]
 
             cost = np.sum((output - train_Y)**2)
-            print("\nCost: ")
-            print(cost)
-            # print("\nWeights:")
-            # print(self.weights[-1])
-            # print("\nBias:")
-            # print(self.bias[-1])
+            print("(Training...) Cost: ", cost)
             
             # Back propagation
             # -------------------
@@ -84,6 +79,8 @@ class NeuralNetwork():
                 self.bias[i-1] += bias_delta
             # end_for
         # end_for
+
+        return cost
         
 
     def sigmoid(self, x):

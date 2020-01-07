@@ -133,7 +133,7 @@ if __name__ == "__main__":
     if(sys.argv[1]):
         SET_LEN = int(sys.argv[1])
     
-    SLICE_RATIO = 0.25    # 0 - 1
+    SLICE_RATIO = 0.2    # 0 - 1
 
     RGB = generate_RGB(SET_LEN)
     BW = generate_BW(RGB)
