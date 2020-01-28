@@ -6,8 +6,8 @@ class NeuralNetwork():
     neurons = []
     weights = []    
     bias = []    
-    LEARNING_RATE = 1
-    BIAS_LEARNING_RATE = 1
+    LEARNING_RATE = 10
+    BIAS_LEARNING_RATE = 2
 
     def __init__(self, neurons = [1,1]):
         # Check if neurons have right configuration
@@ -56,7 +56,7 @@ class NeuralNetwork():
             output = neurons_values[-1]
 
             cost = np.sum((output - train_Y)**2)
-            print("(Training...) Cost: ", cost)
+            # print("(Training...) Cost: ", cost)
             
             # Back propagation
             # -------------------
@@ -82,21 +82,41 @@ class NeuralNetwork():
 
         return cost
         
-    def save(self, path):
-        to_write = []
+    def save(self, name):
+        path = f'./trained_networks/{name}' 
+
+                
+        np.savez(f'{path}/neurons.npz', *self.neurons)
+        np.savez(f'{path}/weights.npz', *self.weights)
+        np.savez(f'{path}/bias.npz', *self.bias)
+
+    def load(self, name):
+        path = f'./trained_networks/{name}' 
         
-        to_write.append(self.neurons)
-        to_write.append(self.weights)
-        to_write.append(self.bias)
+        neurons_dict = np.load(f'{path}/neurons.npz')
+        weights_dict = np.load(f'{path}/weights.npz')
+        bias_dict = np.load(f'{path}/bias.npz')
 
-        f = open(path, "w")
-        for elem in to_write:
-            f.write(str(elem)+'\n')
-        f.close()
+        neurons = []
+        for elem in neurons_dict.values():
+            neurons.append(int(elem))
 
+        weights = []
+        for elem in weights_dict.values():
+            weights.append(elem)
+
+        bias = []
+        for elem in bias_dict.values():
+            bias.append(elem)
+
+        self.neurons = neurons
+        self.weights = weights
+        self.bias = bias
 
     def sigmoid(self, x):
-        return 1.0 / (1 + np.exp(-x))
+        b = x.max()
+        y = np.exp(x - b)
+        return y / y.sum()
 
     # Gets sigmoid output as input
     def d_sigmoid(self, y):

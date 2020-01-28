@@ -139,4 +139,4 @@ if __name__ == "__main__":
     BW = generate_BW(RGB)
 
     X_train, Y_train, X_test, Y_test = slice_train_test(RGB, BW, SLICE_RATIO)
-    write_to_files(X_train, Y_train, X_test, Y_test, "./data")
+    write_to_files(X_train, Y_train, X_test, Y_test, "./data/contrast")
