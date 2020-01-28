@@ -82,6 +82,18 @@ class NeuralNetwork():
 
         return cost
         
+    def save(self, path):
+        to_write = []
+        
+        to_write.append(self.neurons)
+        to_write.append(self.weights)
+        to_write.append(self.bias)
+
+        f = open(path, "w")
+        for elem in to_write:
+            f.write(str(elem)+'\n')
+        f.close()
+
 
     def sigmoid(self, x):
         return 1.0 / (1 + np.exp(-x))

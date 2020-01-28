@@ -8,6 +8,9 @@ neural_network = NeuralNetwork([3,2,1])
 
 X_train, Y_train, X_test, Y_test = read_from_files("./data")
 
+neural_network.save('./trained_networks/first.txt')
+exit()
+
 # Normalize data
 from sklearn.preprocessing import MinMaxScaler
 
@@ -16,6 +19,7 @@ X_train = X_train/255
 Y_train = Y_train/255
 X_test = X_test/255
 Y_test = Y_test/255
+
 
 
 cost = 999
