@@ -3,7 +3,7 @@ import numpy as np
 from create_sets import read_from_files
 
 
-neural_network = NeuralNetwork([3,4,1])
+neural_network = NeuralNetwork([3,2,1])
 
 
 X_train, Y_train, X_test, Y_test = read_from_files("./data/contrast")
@@ -18,7 +18,7 @@ X_test = X_test/255
 Y_test = Y_test/255
 
 
-# neural_network.load("contrast")
+neural_network.load("contrast")
 
 # print("")
 # print("===============")
@@ -35,11 +35,11 @@ Y_test = Y_test/255
 
 cost = 100
 i = 0
-while(cost > 50):
+while(cost > 0.0000005):
     cost = neural_network.train(X_train, Y_train, 100)
     i += 1
-    if i%100 == 0:
-        print(f"(Training... iteration: {i}) Cost: {cost}")
+    # if i%100 == 0:
+    print(f"(Training... iteration: {i}) Cost: {cost}")
 
 neural_network.train(X_train, Y_train, 1000)
 print(f"(Training... iteration: {i+1000}) Cost: {cost}")
@@ -57,5 +57,5 @@ cost = np.sum((rounded_output - Y_test)**2)
 print("\ncost: ", cost)
 
 
-neural_network.save("contrast")
+# neural_network.save("contrast")
 

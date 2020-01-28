@@ -6,8 +6,8 @@ class NeuralNetwork():
     neurons = []
     weights = []    
     bias = []    
-    LEARNING_RATE = 10
-    BIAS_LEARNING_RATE = 2
+    LEARNING_RATE = 1
+    BIAS_LEARNING_RATE = 1
 
     def __init__(self, neurons = [1,1]):
         # Check if neurons have right configuration
@@ -36,7 +36,7 @@ class NeuralNetwork():
             # Calculate sum
             next_neurons_sums = np.dot(neurons_values[i], self.weights[i]) + self.bias[i]
             # Activation function
-            neurons_values.append( self.sigmoid(next_neurons_sums) )
+            neurons_values.append( self.activation_function(next_neurons_sums) )
 
         return neurons_values[-1]
         
@@ -52,7 +52,7 @@ class NeuralNetwork():
                 # Calculate sum
                 next_neurons_sums = np.dot(neurons_values[i], self.weights[i]) + self.bias[i]
                 # Activation function
-                neurons_values.append( self.sigmoid(next_neurons_sums) )
+                neurons_values.append( self.activation_function(next_neurons_sums) )
             output = neurons_values[-1]
 
             cost = np.sum((output - train_Y)**2)
@@ -68,7 +68,7 @@ class NeuralNetwork():
 
             # Calc new weights and bias
             for i in range(1, errors.__len__()+1):
-                gradient = errors[i-1] * self.d_sigmoid(neurons_values[i])
+                gradient = errors[i-1] * self.d_activation_function(neurons_values[i])
                 
                 weights_delta = self.LEARNING_RATE * np.dot(neurons_values[i-1].T, gradient)
                 gradient_rows = np.ma.size(gradient, 0)
@@ -113,15 +113,38 @@ class NeuralNetwork():
         self.weights = weights
         self.bias = bias
 
-    def sigmoid(self, x):
-        b = x.max()
-        y = np.exp(x - b)
-        return y / y.sum()
+    def activation_function(self, x):
+        return self.__sigmoid(x)        
+    
+    # Gets activation_function output as input
+    def d_activation_function(self, y):
+        return self.__d_sigmoid(y)
+
+    def __sigmoid(self, x):
+        return 1.0 / (1 + np.exp(-x))
+        # a = arr
+        # for x in np.nditer(a, op_flags = ['readwrite']):
+        #     if x >= 0:
+        #         z = np.exp(-x)
+        #         x[...] = 1 / (1 + z)
+        #     else:
+        #         # if x is less than zero then z will be small, denom can't be
+        #         # zero because it's 1+z.
+        #         z = np.exp(x)
+        #         x[...] = z / (1 + z)
+        # return a
 
     # Gets sigmoid output as input
-    def d_sigmoid(self, y):
+    def __d_sigmoid(self, y):
         return y * (1 - y)
 
+
+    def __ReLU(self, x):
+        return np.maximum(np.zeros(np.shape(x)), x)
+        return np.where(x > 0, x, 0)
+
+    def __d_ReLU(self, y):
+        return np.where(y>0, 1, 0)
 
 
 if __name__ == "__main__":
